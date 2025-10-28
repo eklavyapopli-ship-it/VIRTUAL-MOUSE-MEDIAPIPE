@@ -19,7 +19,7 @@ with mp_holistic.Holistic(min_detection_confidence=0.7, min_tracking_confidence=
         img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         
         
-        # mp_drawing.draw_landmarks(flipped, results.face_landmarks,mp_holistic.FACEMESH_TESSELATION)
+        
         mp_drawing.draw_landmarks(flipped, results.left_hand_landmarks,mp_holistic.HAND_CONNECTIONS)
         if results.left_hand_landmarks:
             
@@ -46,16 +46,18 @@ with mp_holistic.Holistic(min_detection_confidence=0.7, min_tracking_confidence=
             rect2=cv2.rectangle(flipped, (l1, m1), (l2, m2), (0, 0, 255), 2) 
             
             
-            # distance = math.sqrt((bx - ax)**2 + (by - ay)**2)
-            # print(distance)
-            # if distance<60:
-            #     autopy.mouse.click()
+            
             if results.left_hand_landmarks:
                 if results.left_hand_landmarks.landmark[mp_holistic.HandLandmark.THUMB_TIP].x< results.left_hand_landmarks.landmark[mp_holistic.HandLandmark.THUMB_IP].x:
-                    print("up")
+                    
+                    if results.left_hand_landmarks.landmark[mp_holistic.HandLandmark.MIDDLE_FINGER_TIP].y>results.left_hand_landmarks.landmark[mp_holistic.HandLandmark.MIDDLE_FINGER_PIP].y and results.left_hand_landmarks.landmark[mp_holistic.HandLandmark.INDEX_FINGER_TIP].y>results.left_hand_landmarks.landmark[mp_holistic.HandLandmark.INDEX_FINGER_PIP].y:
+                        pyautogui.click()
+                        print("middle and index finger up")
+                        
                 else:
-                    print("down")
-                    pyautogui.moveTo(index_finger_tip.x*screen_w,index_finger_tip.y*screen_h/5)
+                    
+                    autopy.mouse.smooth_move(index_finger_tip.x*screen_w,index_finger_tip.y*screen_h)
+                
 
             
         cv2.imshow('Holistic', flipped)
