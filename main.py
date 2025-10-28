@@ -44,8 +44,19 @@ with mp_holistic.Holistic(min_detection_confidence=0.7, min_tracking_confidence=
             cv2.rectangle(flipped, (x1, y1), (x2, y2), (0, 255, 0), 2) 
             rect1=cv2.rectangle(flipped, (p1, q1), (p2, q2), (255, 0, 0), 2) 
             rect2=cv2.rectangle(flipped, (l1, m1), (l2, m2), (0, 0, 255), 2) 
-            autopy.mouse.smooth_move(index_finger_tip.x*screen_w,index_finger_tip.y*screen_h)
             
+            
+            # distance = math.sqrt((bx - ax)**2 + (by - ay)**2)
+            # print(distance)
+            # if distance<60:
+            #     autopy.mouse.click()
+            if results.left_hand_landmarks:
+                if results.left_hand_landmarks.landmark[mp_holistic.HandLandmark.THUMB_TIP].x< results.left_hand_landmarks.landmark[mp_holistic.HandLandmark.THUMB_IP].x:
+                    print("up")
+                else:
+                    print("down")
+                    pyautogui.moveTo(index_finger_tip.x*screen_w,index_finger_tip.y*screen_h/5)
+
             
         cv2.imshow('Holistic', flipped)
         if cv2.waitKey(10) & 0xff == ord('q'):
